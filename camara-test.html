@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Test Cámara</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #111;
+      color: white;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      gap: 16px;
+    }
+    video {
+      width: 100%;
+      max-width: 480px;
+      border-radius: 12px;
+      background: #000;
+      display: none;
+    }
+    button {
+      background: #c0392b;
+      color: white;
+      border: none;
+      padding: 14px 36px;
+      font-size: 1.1rem;
+      border-radius: 50px;
+      cursor: pointer;
+    }
+    button:hover { background: #e74c3c; }
+    #status {
+      font-size: 0.95rem;
+      opacity: 0.7;
+      text-align: center;
+      padding: 0 16px;
+    }
+    #status.ok  { color: #2ecc71; opacity: 1; }
+    #status.err { color: #e74c3c; opacity: 1; }
+  </style>
+</head>
+<body>
+  <h2>🎥 Test de Cámara</h2>
+  <video id="cam" autoplay playsinline muted></video>
+  <button onclick="startCam()">Abrir cámara</button>
+  <p id="status">Presiona el botón para probar la cámara.</p>
+
+  <script>
+    async function startCam() {
+      const status = document.getElementById('status');
+      const video  = document.getElementById('cam');
+      status.className = '';
+      status.textContent = 'Solicitando permiso…';
+
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'environment' }, // cámara trasera
+          audio: false
+        });
+        video.srcObject = stream;
+        video.style.display = 'block';
+        status.textContent = '✅ ¡Cámara funcionando correctamente!';
+        status.className = 'ok';
+      } catch (err) {
+        status.textContent = '❌ Error: ' + err.message;
+        status.className = 'err';
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>
