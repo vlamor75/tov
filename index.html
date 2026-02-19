@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>AR Test Debug</title>
-    <!-- Primero A-Frame, luego MindAR -->
+    <title>AR Demo - TOV</title>
+    <!-- A-Frame primero, luego MindAR -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
@@ -21,100 +21,118 @@
         text-align: center;
         padding: 20px;
       }
+      #start-screen img { width: 160px; margin-bottom: 24px; border-radius: 12px; }
       #start-btn {
         background: #555; color: white;
         border: none; padding: 16px 40px;
         font-size: 1.2rem; border-radius: 50px;
-        cursor: pointer; margin-top: 24px;
+        cursor: pointer; margin-top: 16px;
       }
       #start-btn.ready { background: #c0392b; }
-      #scene-status { margin-top: 12px; font-size: 0.85rem; opacity: 0.6; }
-      #log {
-        position: fixed; bottom: 0; left: 0;
-        width: 100%; background: rgba(0,0,0,0.85);
-        color: #0f0; font-family: monospace; font-size: 0.8rem;
-        padding: 10px; z-index: 99999;
-        max-height: 200px; overflow-y: auto;
+      #start-btn.ready:hover { background: #e74c3c; }
+      #start-screen p { opacity: 0.5; font-size: 0.9rem; margin-top: 12px; }
+
+      #loading {
+        position: fixed; top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.85);
+        display: none; flex-direction: column;
+        align-items: center; justify-content: center;
+        color: white; font-family: sans-serif;
+        z-index: 9998;
       }
+      #loading p { margin-top: 16px; font-size: 1.1rem; opacity: 0.8; }
+      .spinner {
+        width: 50px; height: 50px;
+        border: 5px solid rgba(255,255,255,0.2);
+        border-top-color: #c0392b;
+        border-radius: 50%;
+        animation: spin 0.9s linear infinite;
+      }
+      @keyframes spin { to { transform: rotate(360deg); } }
     </style>
   </head>
   <body>
 
     <div id="start-screen">
-      <h2>AR Test Debug</h2>
-      <img src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.png"
-           style="width:180px; border-radius:8px;" />
-      <button id="start-btn" onclick="startAR()" disabled>⏳ Cargando...</button>
-      <p id="scene-status">Esperando A-Frame...</p>
+      <img
+        src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Talleres_de_Oraci%C3%B3n_y_Vida_logo.svg/200px-Talleres_de_Oraci%C3%B3n_y_Vida_logo.svg.png"
+        onerror="this.style.display='none'"
+        alt="Logo TOV"
+      />
+      <h2 style="margin: 0 0 8px">Talleres de Oración y Vida</h2>
+      <p>Apunta la cámara al logo para ver el contenido AR</p>
+      <button id="start-btn" disabled>⏳ Cargando...</button>
     </div>
 
-    <div id="log"></div>
+    <div id="loading">
+      <div class="spinner"></div>
+      <p>Iniciando cámara…</p>
+    </div>
 
     <a-scene
-      mindar-image="imageTargetSrc: https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/card.mind; autoStart: false; uiLoading: no; uiError: no; uiScanning: no;"
+      mindar-image="imageTargetSrc: ./targets.mind; autoStart: false; uiLoading: no; uiError: no; uiScanning: no;"
       color-space="sRGB"
       renderer="colorManagement: true; physicallyCorrectLights: true"
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
     >
+      <a-assets timeout="10000">
+        <video
+          id="ar-video"
+          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+          preload="auto"
+          loop="true"
+          crossorigin="anonymous"
+          playsinline
+          webkit-playsinline
+        ></video>
+      </a-assets>
+
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <a-box
-          color="#c0392b"
-          width="0.5" height="0.5" depth="0.5"
-          position="0 0 0.1"
-          animation="property: rotation; to: 0 360 0; loop: true; dur: 2000; easing: linear">
-        </a-box>
+        <a-video
+          src="#ar-video"
+          width="1" height="0.5625"
+          position="0 0 0.01"
+          material="shader: flat"
+        ></a-video>
       </a-entity>
     </a-scene>
 
     <script>
+      const videoEl = document.getElementById('ar-video');
       const scene = document.querySelector('a-scene');
-      const btn = document.getElementById('start-btn');
-      const sceneStatus = document.getElementById('scene-status');
+      const loading = document.getElementById('loading');
       const startScreen = document.getElementById('start-screen');
-      const logEl = document.getElementById('log');
-      let sceneReady = false;
+      const btn = document.getElementById('start-btn');
 
-      function log(msg) {
-        const time = new Date().toLocaleTimeString();
-        logEl.innerHTML += `[${time}] ${msg}<br>`;
-        logEl.scrollTop = logEl.scrollHeight;
-      }
-
-      log('Página cargada...');
-
+      // Habilitar botón solo cuando A-Frame esté listo
       scene.addEventListener('loaded', () => {
-        log('✅ A-Frame loaded');
-        sceneReady = true;
         btn.disabled = false;
         btn.textContent = '▶ Iniciar AR';
         btn.classList.add('ready');
-        sceneStatus.textContent = 'Listo';
-
-        const arSystem = scene.systems['mindar-image-system'];
-        log(arSystem ? '✅ MindAR system OK' : '❌ MindAR system NO encontrado');
+        btn.onclick = startAR;
       });
-
-      scene.addEventListener('arReady', () => log('✅ arReady — cámara activa!'));
-      scene.addEventListener('arError', (e) => log('❌ arError: ' + JSON.stringify(e.detail)));
 
       function startAR() {
         startScreen.style.display = 'none';
-        log('▶ Iniciando AR...');
-        try {
-          const arSystem = scene.systems['mindar-image-system'];
-          arSystem.start();
-          log('start() OK');
-        } catch(e) {
-          log('❌ Error: ' + e.message);
-        }
+        loading.style.display = 'flex';
+
+        const arSystem = scene.systems['mindar-image-system'];
+        arSystem.start();
       }
 
+      scene.addEventListener('arReady', () => {
+        loading.style.display = 'none';
+      });
+
       const target = document.querySelector('[mindar-image-target]');
-      target.addEventListener('targetFound', () => log('🎯 ¡Target detectado!'));
-      target.addEventListener('targetLost',  () => log('Target perdido'));
+      target.addEventListener('targetFound', () => {
+        videoEl.play().catch(e => console.warn('Autoplay:', e));
+      });
+      target.addEventListener('targetLost', () => videoEl.pause());
     </script>
   </body>
 </html>
