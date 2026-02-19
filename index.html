@@ -4,7 +4,6 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>AR Demo - TOV</title>
-    <!-- A-Frame primero, luego MindAR -->
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
     <style>
@@ -77,10 +76,10 @@
       vr-mode-ui="enabled: false"
       device-orientation-permission-ui="enabled: false"
     >
-      <a-assets timeout="10000">
+      <a-assets timeout="15000">
         <video
           id="ar-video"
-          src="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4"
+          src="./video.mp4"
           preload="auto"
           loop="true"
           crossorigin="anonymous"
@@ -108,7 +107,6 @@
       const startScreen = document.getElementById('start-screen');
       const btn = document.getElementById('start-btn');
 
-      // Habilitar botón solo cuando A-Frame esté listo
       scene.addEventListener('loaded', () => {
         btn.disabled = false;
         btn.textContent = '▶ Iniciar AR';
@@ -119,9 +117,7 @@
       function startAR() {
         startScreen.style.display = 'none';
         loading.style.display = 'flex';
-
-        const arSystem = scene.systems['mindar-image-system'];
-        arSystem.start();
+        scene.systems['mindar-image-system'].start();
       }
 
       scene.addEventListener('arReady', () => {
