@@ -314,7 +314,7 @@ h4 {
     gap: 24px;
 }
 
-/* Grid layout */
+/* Grid layouts */
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -322,57 +322,77 @@ h4 {
     align-items: center;
 }
 
-/* About Section */
-.img-wrapper {
-    position: relative;
-    padding: 20px;
+.grid-about {
+    display: grid;
+    grid-template-columns: 1.2fr 0.8fr;
+    /* Image gets more protagonism */
+    gap: 100px;
+    align-items: center;
 }
 
-.img-wrapper::before {
+/* About Section Enhancements */
+.main-image-wrapper {
+    position: relative;
+    z-index: 5;
+}
+
+.main-image-wrapper::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 140px;
-    height: 140px;
-    background: var(--accent);
-    border-radius: 20px;
+    top: -40px;
+    left: -40px;
+    width: 300px;
+    height: 300px;
+    background: radial-gradient(circle, rgba(234, 179, 8, 0.2) 0%, transparent 70%);
     z-index: -1;
+    border-radius: 50%;
 }
 
-.img-rounded {
-    border-radius: 30px;
-    width: 100%;
-    box-shadow: var(--shadow-premium);
+.featured-image {
+    border-radius: 40px;
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.3);
+    transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.floating-card {
+.featured-image:hover {
+    transform: scale(1.02);
+}
+
+.floating-quote {
     position: absolute;
-    bottom: 0;
+    bottom: -40px;
     right: -20px;
     background: var(--white);
-    padding: 35px;
-    border-radius: 20px;
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
-    max-width: 280px;
+    padding: 40px;
+    border-radius: 24px;
+    box-shadow: var(--shadow-premium);
+    max-width: 400px;
+    border-left: 8px solid var(--accent);
 }
 
-.floating-card i {
+.floating-quote i {
     color: var(--accent);
-    font-size: 2rem;
+    font-size: 2.5rem;
     margin-bottom: 20px;
+    display: block;
 }
 
-.floating-card p {
+.floating-quote p {
     font-style: italic;
     color: var(--text-dark);
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 500;
 }
 
-.floating-card cite {
+.floating-quote cite {
     font-weight: 700;
     color: var(--primary);
     font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .lead {
