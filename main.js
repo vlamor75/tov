@@ -28,12 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Form Submission Handling
     if (enrollmentForm) {
-        enrollmentForm.addEventListener('submit', (e) => {
+        enrollmentForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             // Collect form data
             const formData = new FormData(enrollmentForm);
-            const data = Object.fromEntries(formData.entries());
 
             // Animation for button
             const btn = enrollmentForm.querySelector('button');
@@ -41,20 +40,35 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
             btn.disabled = true;
 
-            // Simulate API call / Storage
-            setTimeout(() => {
-                console.log('Inscripción recibida:', data);
+            try {
+                // URL DE GOOGLE SHEETS CONECTADA
+                const GOOGLE_SHEET_URL = 'https://script.google.com/macros/s/AKfycbx0PyOLTc4EHB0BstWaQ1fBLKGDuYXOAujn95OHhe4zhel9k5XIzH6fyKnm-hYS3KPu/exec';
 
-                // Success State
+                await fetch(GOOGLE_SHEET_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    body: formData
+                });
+
+                console.log('Inscripción enviada con éxito a Google Sheets');
+
+                // Mostramos mensaje de éxito
                 enrollmentForm.classList.add('hidden');
                 formSuccess.classList.remove('hidden');
                 formSuccess.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
-                // OPTION: Save to LocalStorage for demonstration
+                // Guardamos localmente también como respaldo
+                const data = Object.fromEntries(formData.entries());
                 let leads = JSON.parse(localStorage.getItem('tov_leads') || '[]');
                 leads.push({ ...data, date: new Date().toLocaleString() });
                 localStorage.setItem('tov_leads', JSON.stringify(leads));
-            }, 1500);
+
+            } catch (error) {
+                console.error('Error al enviar:', error);
+                alert('Hubo un problema al enviar tu inscripción. Por favor intenta de nuevo.');
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         });
     }
 
