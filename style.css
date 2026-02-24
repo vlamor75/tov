@@ -274,24 +274,21 @@ h4 {
 /* Modernized About Section */
 .about {
     position: relative;
-    background: linear-gradient(rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.9)),
-        url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') center/cover fixed;
+    background: var(--bg-light);
+    /* Volviendo al fondo gris claro */
 }
 
 .grid-about {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 80px;
-    align-items: flex-start;
+    grid-template-columns: 0.8fr 1.2fr 1fr;
+    /* 3 Columnas: Orante | Texto | Comunidad */
+    gap: 40px;
+    align-items: center;
 }
 
 .about-text {
-    background: rgba(255, 255, 255, 0.6);
-    backdrop-filter: blur(15px);
-    padding: 60px;
-    border-radius: 40px;
-    border: 1px solid rgba(255, 255, 255, 0.5);
-    box-shadow: 0 40px 80px rgba(0, 0, 0, 0.05);
+    padding: 20px;
+    background: transparent;
 }
 
 .main-image-wrapper {
@@ -307,17 +304,28 @@ h4 {
     border: 8px solid rgba(255, 255, 255, 0.5);
 }
 
+.side-image {
+    border-radius: 20px;
+    box-shadow: var(--shadow-premium);
+    width: 100%;
+    height: auto;
+}
+
 .quote-container {
-    margin-top: 50px;
-    background: rgba(15, 23, 42, 0.03);
-    padding: 40px;
-    border-radius: 30px;
-    border-left: 8px solid var(--accent);
+    margin-top: 30px;
+}
+
+.below-quote {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 20px;
+    border-left: 6px solid var(--accent);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
 }
 
 .below-quote i {
     color: var(--accent);
-    font-size: 2.5rem;
+    font-size: 2rem;
     margin-bottom: 20px;
     display: block;
 }
@@ -326,8 +334,8 @@ h4 {
     font-style: italic;
     color: var(--primary);
     margin-bottom: 20px;
-    font-size: 1.3rem;
-    line-height: 1.6;
+    font-size: 1.1rem;
+    line-height: 1.5;
     font-family: 'Cormorant Garamond', serif;
     font-weight: 600;
 }
@@ -335,7 +343,7 @@ h4 {
 .below-quote cite {
     font-weight: 700;
     color: var(--primary);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     text-transform: uppercase;
     letter-spacing: 2px;
 }
