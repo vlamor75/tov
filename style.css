@@ -363,26 +363,31 @@ h4 {
 }
 
 .below-quote {
-    background: var(--bg-light);
-    padding: 35px;
+    background: linear-gradient(rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.94)),
+        url('https://images.unsplash.com/photo-1493134794382-4483233d50bb?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80');
+    background-size: cover;
+    background-position: center;
+    padding: 40px;
     border-radius: 24px;
     border-left: 8px solid var(--accent);
     position: relative;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
 }
 
 .below-quote i {
     color: var(--accent);
     font-size: 2rem;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     display: block;
+    opacity: 0.8;
 }
 
 .below-quote p {
     font-style: italic;
-    color: var(--text-dark);
-    margin-bottom: 15px;
-    font-size: 1.1rem;
-    line-height: 1.5;
+    color: var(--primary);
+    margin-bottom: 20px;
+    font-size: 1.15rem;
+    line-height: 1.6;
     font-family: 'Cormorant Garamond', serif;
     font-weight: 500;
 }
@@ -392,7 +397,7 @@ h4 {
     color: var(--primary);
     font-size: 0.85rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
 }
 
 .lead {
